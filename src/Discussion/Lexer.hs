@@ -1,5 +1,11 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
 
+module Discussion.Lexer (lex) where
+
+--------------------------------------------------------------------------------
+
+import Prelude hiding (lex)
+
 import Text.Parsec
 import Text.Parsec.String
 -- import Text.Parsec.Text
@@ -7,49 +13,25 @@ import Text.Parsec.Pos
 
 import Control.Applicative hiding (many, (<|>))
 
-
-data Token = Word String
-             | Symbol String
-             | Backquote -- "`"
-             | LBrace    -- "{"
-             | RBrace    -- "}"
-             | LParen    -- "("
-             | RParen    -- ")"
-             deriving (Eq, Show)
-
-isWord :: Token -> Bool
-isWord (Word _) = True
-isWord _        = False
-
-isSymbol :: Token -> Bool
-isSymbol (Symbol _) = True
-isSymbol _          = False
+import Discussion.Token
 
 --------------------------------------------------------------------------------
 
-type StParser = Parsec [Token] ()
-
-stpAssign :: StParser [Token]
-stpAssign = do
-  lhs <- many1 stpWord
-  stpAssignOp
-  rhs <- many1 stpAnyToken
-  eof
-  return $ lhs ++ [Symbol "="] ++ rhs
+lex :: String -> Either ParseError [Token]
+lex src = joinEOS <$> (parseLines . lines $ src)
 
 --------------------------------------------------------------------------------
 
-stpAnyToken :: StParser Token
-stpAnyToken = satisfy' $ const True
-
-stpWord :: StParser Token
-stpWord = satisfy' isWord
-
-stpAssignOp :: StParser Token
-stpAssignOp = satisfy' $
-  \tok -> case tok of
-               Symbol "=" -> True
-               _          -> False
+-- Token列の適切な場所にEOSを差し込みながらToken列のリストをconcatする
+-- 次の行のToken列がSymbol "="を含めば、現在のToken列の末尾にEOSを挿入
+-- 最後のToken列の末尾にもEOSを足す
+joinEOS :: [[Token]] -> [Token]
+joinEOS []        = []
+joinEOS (toks:[]) = toks ++ [EOS]
+joinEOS (toks1:toks2:contTokss) =
+  if Symbol "=" `elem` toks2
+     then joinEOS $ (toks1 ++ [EOS] ++ toks2) : contTokss
+     else joinEOS $ (toks1 ++ toks2) : contTokss
 
 --------------------------------------------------------------------------------
 
@@ -61,6 +43,9 @@ parseLine = parse pTokens ""
 
 --------------------------------------------------------------------------------
 
+-- Token列を取り出す
+-- ストリームを使いきらずに途中でTokenのparseに失敗した場合は
+-- Token列のparse全体が失敗する
 pTokens :: Parser [Token]
 pTokens = many pToken <* eof
 
@@ -75,18 +60,15 @@ pToken = token' $ choice [pWord
 
 --------------------------------------------------------------------------------
 
+-- /\w(\w|\d)+/
 pWord :: Parser Token
-pWord = do
-  c  <- letter
-  cs <- many alphaNum
-  return $ Word (c:cs)
+pWord = Word <$> ((:) <$> letter <*> many alphaNum)
 
 --------------------------------------------------------------------------------
 
+-- /[!#$%&'*+,-.\/:;<=>?@\\^_|~]+/
 pSymbol :: Parser Token
-pSymbol = do
-  cs <- many1 $ oneOf "!#$%&'*+,-./:;<=>?@\\^_|~"
-  return $ Symbol cs
+pSymbol = Symbol <$> (many1 . oneOf $ "!#$%&'*+,-./:;<=>?@\\^_|~")
 
 --------------------------------------------------------------------------------
 
@@ -107,10 +89,6 @@ pRParen = char ')' *> return RParen
 
 --------------------------------------------------------------------------------
 
+-- 前後の空白をtrim
 token' :: Parser a -> Parser a
 token' p = spaces *> p <* spaces
-
-satisfy' :: (Stream s m Token) => (Token -> Bool) -> ParsecT s u m Token
-satisfy' f = tokenPrim (\t -> show t)
-                       (\pos t _ts -> updatePosChar pos '_')
-                       (\t -> if f t then Just t else Nothing)
