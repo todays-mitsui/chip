@@ -1,9 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import Prelude hiding (lex)
+module Discussion (module Discussion.Token,
+                   module Discussion.Lexer,
+                   module Discussion.Term,
+                   module Discussion.Parser) where
 
 import Discussion.Token
 import Discussion.Lexer
-
-main :: IO()
-main = putStrLn . show $ lex "``(\\x -> function(){ console.log(x); }) y ()"
+import Discussion.Term
+import Discussion.Parser

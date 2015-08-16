@@ -1,6 +1,8 @@
+module Discussion.Term where
 
 data Expr = Assign Var Args Term
-            | Reduct Count Term
+            | Reduct Term
+            deriving (Eq, Show)
 
 type Args  = [Var]
 type Count = Int
@@ -8,7 +10,7 @@ type Count = Int
 --------------------------------------------------------------------------------
 
 data Term = VarT Var
-            | Apply [Var] [Term]
+            | App [Term]
             | Lambda [Var] Term
             | Func Rank Identifier
             deriving (Eq, Show)

@@ -1,4 +1,4 @@
-module Discussion.Token (Token(..)) where
+module Discussion.Token (Token(..), isWord, isSymbol) where
 
 data Token = Word String
              | Symbol String
