@@ -13,7 +13,7 @@ import Text.Parsec.Pos
 
 import Control.Applicative hiding (many, (<|>))
 
-import Discussion.Token
+import Discussion.Data
 
 --------------------------------------------------------------------------------
 

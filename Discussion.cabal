@@ -18,9 +18,8 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Discussion
-                     , Discussion.Token
+                     , Discussion.Data
                      , Discussion.Lexer
-                     , Discussion.Term
                      , Discussion.Parser
   build-depends:       base >=4.7 && <4.8
                      , parsec3

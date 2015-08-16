@@ -1,11 +1,21 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Discussion (module Discussion.Token,
-                   module Discussion.Lexer,
-                   module Discussion.Term,
-                   module Discussion.Parser) where
+module Discussion (
+    module Discussion.Data
+  , module Discussion.Lexer
+  , module Discussion.Parser
+  , defaultMain
+) where
 
-import Discussion.Token
+import Discussion.Data
 import Discussion.Lexer
-import Discussion.Term
 import Discussion.Parser
+
+import Prelude hiding (lex)
+
+defaultMain = do
+  let lexed  = lex "y = \\x -> \\y -> \\z -> ``z y x"
+  putStrLn $ show lexed
+  putStrLn ""
+  let parsed = parse =<< lexed
+  putStrLn $ show parsed

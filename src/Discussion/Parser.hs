@@ -9,8 +9,7 @@ import qualified Text.Parsec         as     Parsec (parse)
 import           Text.Parsec.Pos
 import           Control.Applicative hiding        (many, (<|>))
 
-import           Discussion.Token
-import           Discussion.Term
+import           Discussion.Data
 
 --------------------------------------------------------------------------------
 
@@ -24,9 +23,9 @@ assign :: TokParser Expr
 assign = do
   (v, args) <- simpleApply
   tok $ Symbol "="
-  rhs      <- term
+  rhs       <- term
   tok $ EOS
-  return $ Assign v args rhs
+  return $ Assign v args (compact rhs)
 
 -- TokParser Term --------------------------------------------------------------
 
