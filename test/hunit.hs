@@ -27,6 +27,8 @@ case_lexer_test4 =
   LBrace, Word "console", Symbol ".", Word "log", LParen, Word "x", RParen,
   Symbol ";", RBrace, Word "y", RParen, EOS]
 
+case_lexer_test5 = Discussion.lex ":123" @?= Right [Symbol ":", Number 123, EOS]
+
 instance Eq ParseError where
   err1 == err2 = show err1 == show err2
 
@@ -40,3 +42,7 @@ case_parser_test1 =
 
 case_parser_test2 =
   assertBool "" . isLeft . Discussion.parse $ [Word "x", Symbol "=", Word "x"]
+
+case_parser_test3 =
+  Discussion.parse [Symbol ":", Number 123, Word "x", EOS] @?=
+  Right (Reduct (Just 123) (VarT (Var "x")))

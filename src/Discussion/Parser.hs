@@ -4,7 +4,7 @@ module Discussion.Parser (parse) where
 
 --------------------------------------------------------------------------------
 
-import           Text.Parsec         hiding        (parse)
+import           Text.Parsec         hiding        (parse, count)
 import qualified Text.Parsec         as     Parsec (parse)
 import           Text.Parsec.Pos
 import           Control.Applicative hiding        (many, (<|>))
@@ -13,11 +13,14 @@ import           Discussion.Data
 
 --------------------------------------------------------------------------------
 
-parse = Parsec.parse assign ""
+parse = Parsec.parse expr ""
 
 --------------------------------------------------------------------------------
 
 type TokParser = Parsec [Token] ()
+
+expr :: TokParser Expr
+expr = assign <|> reduct
 
 assign :: TokParser Expr
 assign = do
@@ -26,6 +29,13 @@ assign = do
   rhs       <- term
   tok $ EOS
   return $ Assign v args (compact rhs)
+
+reduct :: TokParser Expr
+reduct = do
+  n <- count
+  t <- term
+  tok $ EOS
+  return $ Reduct n t
 
 -- TokParser Term --------------------------------------------------------------
 
@@ -91,10 +101,22 @@ simpleApply' = do
 var :: TokParser Var
 var = word2var <$> word
 
+--------------------------------------------------------------------------------
+
+count :: TokParser (Maybe Int)
+count = do
+    tok $ Symbol ":"
+    Number n <- number
+    return $ Just n
+  <|> return Nothing
+
 -- TokParser Token -------------------------------------------------------------
 
 word :: TokParser Token
 word = satisfy' isWord
+
+number :: TokParser Token
+number = satisfy' isNumber
 
 -- anyToken :: TokParser Token
 -- anyToken = satisfy' $ const True

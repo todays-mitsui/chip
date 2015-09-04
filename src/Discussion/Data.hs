@@ -3,7 +3,7 @@ module Discussion.Data where
 import Control.Applicative ((<$>))
 
 data Expr = Assign Var Args Term
-            | Reduct Term
+            | Reduct (Maybe Int) Term
             deriving (Eq, Show)
 
 type Args  = [Var]
@@ -35,6 +35,7 @@ compact (Lambda vs   t)             = Lambda vs (compact t)
 --------------------------------------------------------------------------------
 
 data Token = Word Identifier
+             | Number Int
              | Symbol Identifier
              | Backquote -- "`"
              | LBrace    -- "{"
@@ -51,6 +52,10 @@ type Identifier = String
 isWord :: Token -> Bool
 isWord (Word _) = True
 isWord _        = False
+
+isNumber :: Token -> Bool
+isNumber (Number _) = True
+isNumber _          = False
 
 isSymbol :: Token -> Bool
 isSymbol (Symbol _) = True

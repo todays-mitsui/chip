@@ -51,6 +51,7 @@ pTokens = many pToken <* eof
 
 pToken :: Parser Token
 pToken = token' $ choice [pWord
+                        , pNumber
                         , pSymbol
                         , pBackquote
                         , pLBrace
@@ -63,6 +64,9 @@ pToken = token' $ choice [pWord
 -- /\w(\w|\d)+/
 pWord :: Parser Token
 pWord = Word <$> ((:) <$> letter <*> many alphaNum)
+
+pNumber :: Parser Token
+pNumber = Number . read <$> many1 digit
 
 --------------------------------------------------------------------------------
 
