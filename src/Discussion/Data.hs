@@ -46,19 +46,3 @@ data Token = Word Identifier
              deriving (Eq, Show)
 
 type Identifier = String
-
--- 述語 -------------------------------------------------------------------------
-
-isWord :: Token -> Bool
-isWord (Word _) = True
-isWord _        = False
-
-isNumber :: Token -> Bool
-isNumber (Number _) = True
-isNumber _          = False
-
-isSymbol :: Token -> Bool
-isSymbol (Symbol _) = True
-isSymbol _          = False
-
---------------------------------------------------------------------------------

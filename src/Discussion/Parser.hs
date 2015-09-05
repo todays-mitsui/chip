@@ -10,6 +10,7 @@ import           Text.Parsec.Pos
 import           Control.Applicative hiding        (many, (<|>))
 
 import           Discussion.Data
+import           Discussion.Bool
 
 --------------------------------------------------------------------------------
 
