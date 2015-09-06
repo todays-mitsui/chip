@@ -21,7 +21,7 @@ parse = Parsec.parse expr ""
 type TokParser = Parsec [Token] ()
 
 expr :: TokParser Expr
-expr = assign <|> reduct
+expr = try assign <|> reduct
 
 assign :: TokParser Expr
 assign = do
