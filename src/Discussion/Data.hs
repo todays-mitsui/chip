@@ -1,7 +1,5 @@
 module Discussion.Data where
 
-import Control.Applicative ((<$>))
-
 data Expr = Assign Var Args Term
             | Reduct (Maybe Int) Term
             deriving (Eq, Show)
@@ -22,15 +20,6 @@ newtype Var = Var Identifier
 
 type Rank       = Int
 
--- Termを本質的な構造は変えずに最小の構成にする
-compact :: Term -> Term
-compact v@(VarT _)                  = v
-compact f@(Func _ _)                = f
-compact (App ((App ts1) : ts2))     =
-  compact $ App ((compact <$> ts1) ++ (compact <$> ts2))
-compact (App   ts)                  = App (compact <$> ts)
-compact (Lambda vs1 (Lambda vs2 t)) = compact $ Lambda (vs1 ++ vs2) (compact t)
-compact (Lambda vs   t)             = Lambda vs (compact t)
 
 --------------------------------------------------------------------------------
 

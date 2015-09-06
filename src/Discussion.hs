@@ -5,6 +5,7 @@ module Discussion (
   , module Discussion.Bool
   , module Discussion.Lexer
   , module Discussion.Parser
+  , module Discussion.Converter
   , defaultMain
 ) where
 
@@ -12,6 +13,7 @@ import Discussion.Data
 import Discussion.Bool
 import Discussion.Lexer
 import Discussion.Parser
+import Discussion.Converter
 
 import Prelude hiding (lex)
 
@@ -21,3 +23,5 @@ defaultMain = do
   putStrLn ""
   let parsed = parse =<< lexed
   putStrLn $ show parsed
+
+shortParse str = compact `fmap` (lex str >>= parseTerm)

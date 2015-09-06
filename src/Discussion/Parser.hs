@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
 
-module Discussion.Parser (parse) where
+module Discussion.Parser (parse, parseExpr, parseTerm) where
 
 --------------------------------------------------------------------------------
 
@@ -11,10 +11,15 @@ import           Control.Applicative hiding        (many, (<|>))
 
 import           Discussion.Data
 import           Discussion.Bool
+import           Discussion.Converter
 
 --------------------------------------------------------------------------------
 
-parse = Parsec.parse expr ""
+parse = parseExpr
+
+parseExpr = Parsec.parse expr ""
+
+parseTerm = Parsec.parse term ""
 
 --------------------------------------------------------------------------------
 

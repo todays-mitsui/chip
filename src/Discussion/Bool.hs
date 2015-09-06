@@ -39,3 +39,5 @@ isClosed' vs (App ts)       = all (isClosed' vs) ts
 isClosed' vs (Lambda vs' t) = isClosed' (vs ++ vs') t
 isClosed' _  (Func _ _)     = True
 isClosed' vs (VarT v)       = v `elem` vs
+
+--------------------------------------------------------------------------------
