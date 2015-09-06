@@ -36,9 +36,6 @@ case_x_is_bound_in_lambda_y_x =
 case_x_is_free_in_lambda_x_x =
   assertBool "" $ x `isFreeIn` Lambda [x] (VarT x)
 
-case_x_is_free_in_any_functions =
-  assertBool "" $ x `isFreeIn` Func undefined undefined
-
 case_x_is_bound_in_term =
   assertBool "" $ x `isBoundIn` App [VarT z, Lambda [y] (App [VarT y, VarT x]), VarT y]
 
@@ -67,6 +64,3 @@ case_lambda_xy_yx_is_closed =
 
 case_lambda_xy_zx_is_not_closed =
   assertBool "" . not . isClosed $ Lambda [x, y] (App [VarT z, VarT x])
-
-case_any_functions_are_closed =
-  assertBool "" . isClosed $ Func undefined undefined

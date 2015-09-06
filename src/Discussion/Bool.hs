@@ -21,7 +21,6 @@ v `isBoundIn` (App ts)   = any (isBoundIn v) ts
 v `isBoundIn` (Lambda vs t)
   | v `elem` vs          = False
   | otherwise            = v `isBoundIn` t
-_ `isBoundIn` (Func _ _) = False
 v `isBoundIn` (VarT v')  = v == v'
 
 isFreeIn :: Var -> Term -> Bool
@@ -37,7 +36,6 @@ isClosed = isClosed' []
 isClosed' :: [Var] -> Term -> Bool
 isClosed' vs (App ts)       = all (isClosed' vs) ts
 isClosed' vs (Lambda vs' t) = isClosed' (vs ++ vs') t
-isClosed' _  (Func _ _)     = True
 isClosed' vs (VarT v)       = v `elem` vs
 
 --------------------------------------------------------------------------------

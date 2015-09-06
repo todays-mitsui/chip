@@ -1,18 +1,11 @@
 module Discussion.Data where
 
-data Expr = Assign Var Args Term
-            | Reduct (Maybe Int) Term
-            deriving (Eq, Show)
-
-type Args  = [Var]
-type Count = Int
-
 --------------------------------------------------------------------------------
 
 data Term = VarT Var
             | App [Term]
             | Lambda [Var] Term
-            | Func Rank Identifier
+            | Joint Term           -- Termに対する処理の途中で目印として使う事がある
             deriving (Eq, Show)
 
 newtype Var = Var Identifier
@@ -20,6 +13,14 @@ newtype Var = Var Identifier
 
 type Rank       = Int
 
+--------------------------------------------------------------------------------
+
+data Expr = Assign Var Args Term
+            | Reduct (Maybe Int) Term
+            deriving (Eq, Show)
+
+type Args  = [Var]
+type Count = Int
 
 --------------------------------------------------------------------------------
 

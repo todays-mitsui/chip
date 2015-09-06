@@ -10,7 +10,6 @@ import Discussion.Bool
 -- Termを本質的な構造は変えずに最小の構成にする
 compact :: Term -> Term
 compact v@(VarT _)                  = v
-compact f@(Func _ _)                = f
 compact (App ((App ts1) : ts2))     =
   compact $ App ((compact <$> ts1) ++ (compact <$> ts2))
 compact (App   ts)                  = App (compact <$> ts)
@@ -51,11 +50,9 @@ unabstractOnce v (Lambda vs t) = unabstractOnce v $ unabstract vs t
 unabstractOnce v t@(VarT v')
   | v == v'        = i
   | otherwise      = App [k, t]
-unabstractOnce v t@(Func _ _)
-                   = App [k, t]
 
 --------------------------------------------------------------------------------
 
-s = Func 3 "S_"
-k = Func 2 "K_"
-i = Func 1 "I_"
+s = VarT $ Var "S_"
+k = VarT $ Var "K_"
+i = VarT $ Var "I_"

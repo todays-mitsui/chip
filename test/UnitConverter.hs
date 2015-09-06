@@ -17,9 +17,9 @@ x = Var "x"
 y = Var "y"
 z = Var "z"
 
-s = Func 3 "S_"
-k = Func 2 "K_"
-i = Func 1 "I_"
+s = VarT $ Var "S_"
+k = VarT $ Var "K_"
+i = VarT $ Var "I_"
 
 
 case_unlambda_lambda_x_x =
@@ -46,9 +46,6 @@ case_unlambda_lambda_xy_yx =
 
 case_unlambda_var =
   unlambda (VarT x) @?= VarT x
-
-case_unlambda_function =
-  unlambda (Func 1 "a") @?= Func 1 "a"
 
 case_unlambda_term =
   unlambda (App [Lambda [x, y] (App [VarT y, VarT x]), Lambda [z] (VarT z)])
