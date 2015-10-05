@@ -16,12 +16,14 @@ library
   hs-source-dirs:      src
   exposed-modules:     Discussion
                      , Discussion.Data
+                     , Discussion.Context
                      , Discussion.Bool
                      , Discussion.Lexer
                      , Discussion.Parser
                      , Discussion.Converter
   build-depends:       base >=4.7 && <4.8
                      , parsec3
+                     , containers
   default-language:    Haskell2010
 
 executable discussion
@@ -61,6 +63,18 @@ test-suite UnitBool
 test-suite UnitConverter
   type:                exitcode-stdio-1.0
   main-is:             UnitConverter.hs
+  hs-source-dirs:      test
+  default-language:    Haskell2010
+  build-depends:       base >=4.7 && <4.8
+                     , test-framework
+                     , test-framework-th
+                     , test-framework-hunit
+                     , HUnit
+                     , discussion
+
+test-suite UnitContext
+  type:                exitcode-stdio-1.0
+  main-is:             UnitContext.hs
   hs-source-dirs:      test
   default-language:    Haskell2010
   build-depends:       base >=4.7 && <4.8

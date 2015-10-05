@@ -9,9 +9,9 @@ data Term = VarT Var
             deriving (Eq, Show)
 
 newtype Var = Var Identifier
-              deriving (Eq, Show)
+              deriving (Eq, Ord, Show)
 
-type Rank       = Int
+type Identifier = String
 
 --------------------------------------------------------------------------------
 
@@ -34,5 +34,3 @@ data Token = Word Identifier
              | RParen    -- ")"
              | EOS       -- End Of Statement
              deriving (Eq, Show)
-
-type Identifier = String

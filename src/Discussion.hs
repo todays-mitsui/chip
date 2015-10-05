@@ -2,6 +2,7 @@
 
 module Discussion (
     module Discussion.Data
+  , module Discussion.Context
   , module Discussion.Bool
   , module Discussion.Lexer
   , module Discussion.Parser
@@ -10,6 +11,7 @@ module Discussion (
 ) where
 
 import Discussion.Data
+import Discussion.Context
 import Discussion.Bool
 import Discussion.Lexer
 import Discussion.Parser
