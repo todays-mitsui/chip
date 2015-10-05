@@ -17,6 +17,7 @@ library
   exposed-modules:     Discussion
                      , Discussion.Data
                      , Discussion.Context
+                     , Discussion.Focus
                      , Discussion.Bool
                      , Discussion.Lexer
                      , Discussion.Parser
@@ -75,6 +76,18 @@ test-suite UnitConverter
 test-suite UnitContext
   type:                exitcode-stdio-1.0
   main-is:             UnitContext.hs
+  hs-source-dirs:      test
+  default-language:    Haskell2010
+  build-depends:       base >=4.7 && <4.8
+                     , test-framework
+                     , test-framework-th
+                     , test-framework-hunit
+                     , HUnit
+                     , discussion
+
+test-suite UnitFocus
+  type:                exitcode-stdio-1.0
+  main-is:             UnitFocus.hs
   hs-source-dirs:      test
   default-language:    Haskell2010
   build-depends:       base >=4.7 && <4.8
